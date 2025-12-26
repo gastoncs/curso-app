@@ -4,16 +4,22 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CursoController;
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:sanctum');
+Route::prefix('v1')->group(function () {
 
-Route::prefix('cursos')->group(function () {
-    Route::get('average-rating', [CursoController::class, 'averageRating']);
-    Route::get('instructores', [CursoController::class, 'instructores']);
-    Route::get('instructores/all', [CursoController::class, 'instructoresAll']);
-    Route::get('{curso}', [CursoController::class, 'show']);
+    Route::get('/user', function (Request $request) {
+        return $request->user();
+    })->middleware('auth:sanctum');
+
+    Route::get('cursos/average-rating', [CursoController::class, 'averageRating']);
+    Route::get('cursos/instructores', [CursoController::class, 'instructores']);
+    Route::get('cursos/instructores/all', [CursoController::class, 'instructoresAll']);
+
+    Route::get('cursos/{curso}', [CursoController::class, 'show'])->whereNumber('curso');
+    Route::put('cursos/{curso}', [CursoController::class, 'update']);
+    Route::delete('cursos/{curso}', [CursoController::class, 'destroy']);
+    Route::apiResource('cursos', CursoController::class);
 });
 
-Route::apiResource('cursos', CursoController::class);
+
+
 
