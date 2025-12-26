@@ -27,7 +27,12 @@ class CursoController extends Controller
 
     public function show(Curso $curso)
     {
-        return $curso->load('instructor', 'comentarios.user');
+        return $curso->load([
+            'instructor',
+            'lecciones.video',
+            'comentarios.user',
+            'usuariosQueSeleccionaronFavorito:id,name'
+        ]);
     }
 
     public function update(Request $request, Curso $curso)

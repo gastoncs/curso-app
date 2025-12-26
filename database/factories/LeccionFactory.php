@@ -16,6 +16,6 @@ class LeccionFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        return ['titulo' => $this->faker->sentence(4)];
     }
 }

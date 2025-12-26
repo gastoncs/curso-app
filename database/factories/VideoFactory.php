@@ -16,6 +16,6 @@ class VideoFactory extends Factory
      */
     public function definition(): array
     {
-        return [];
+        return ['url' => $this->faker->url()];
     }
 }

@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\Leccion;
+use App\Models\Video;
 use Illuminate\Database\Seeder;
 use App\Models\User;
 use App\Models\Instructor;
@@ -16,12 +18,12 @@ class DatabaseSeeder extends Seeder
         // Create Users
         $users = User::factory()->count(10)->create();
 
-        // Create Instructores with Comentarios
+        // Create Instructores con Comentarios
         $instructors = Instructor::factory()
             ->count(5)
             ->create()
             ->each(function ($instructor) use ($users) {
-                // Each instructores gets 1–3 comments from random users
+                // Cada Instructor tine 1–3 comentarios de usuarios
                 Comentario::factory()
                     ->count(rand(1,3))
                     ->for($instructor, 'comentable')
@@ -30,12 +32,12 @@ class DatabaseSeeder extends Seeder
                     ]);
             });
 
-        // Create Cursos with Comentarios
+        // Create Cursos con Comentarios
         $cursos = Curso::factory()
             ->count(10)
             ->create()
             ->each(function ($curso) use ($users) {
-                // Each curso gets 1–3 comments from random users
+                // Cada Curso tine 1–3 comentarios de usuarios
                 Comentario::factory()
                     ->count(rand(1,3))
                     ->for($curso, 'comentable')
@@ -44,9 +46,9 @@ class DatabaseSeeder extends Seeder
                     ]);
             });
 
-        // Create Favoritos (users favoritos cursos)
+        // Create Favoritos
         foreach ($users as $user) {
-            // Each user favorites 1–5 random cursos
+            // Agregar favorito a cursos
             $favoritosCursos = $cursos->random(rand(1,5));
             foreach ($favoritosCursos as $curso) {
                 Favorito::factory()->create([
@@ -55,5 +57,23 @@ class DatabaseSeeder extends Seeder
                 ]);
             }
         }
+
+        // Create Cursos con Lecciones y Video
+        Curso::all()->each(function ($curso) {
+
+            // Por cada curso hay 3–8 lecciones
+            Leccion::factory()
+                ->count(rand(3, 8))
+                ->create([
+                    'curso_id' => $curso->id,
+                ])
+                ->each(function ($leccion) {
+
+                    // Un video por leccion
+                    Video::factory()->create([
+                        'leccion_id' => $leccion->id,
+                    ]);
+                });
+        });
     }
 }

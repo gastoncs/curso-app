@@ -26,7 +26,7 @@ class Curso extends Model
         return $this->hasMany(Favorito::class);
     }
 
-    public function usersQueFavoritaron()
+    public function usuariosQueSeleccionaronFavorito()
     {
         return $this->belongsToMany(
             User::class,
