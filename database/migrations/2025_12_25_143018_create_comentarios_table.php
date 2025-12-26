@@ -24,11 +24,9 @@ return new class extends Migration
 
             // Polymorphic target (Curso OR Instructor)
             $table->morphs('comentable');
-            // Creates:
-            // comentable_id (BIGINT)
-            // comentable_type (VARCHAR)
-
             $table->timestamps();
+
+            $table->check('calificacion BETWEEN 0 AND 10');
         });
     }
 
