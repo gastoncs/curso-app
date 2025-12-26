@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use App\Models\Curso;
+use App\Models\Instructor;
 use Illuminate\Http\Request;
 
 class CursoController extends Controller
@@ -49,9 +50,39 @@ class CursoController extends Controller
 
     public function destroy(Curso $curso)
     {
-        $curso->delete();
+        try {
+            $curso->safeDelete();
+            return response()->json(['message' => 'Curso eliminado'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => $e->getMessage()], 422);
+        }
+    }
 
-        return response()->json(null, 204);
+    public function instructores()
+    {
+        $instructores = Instructor::select('id', 'nombre')
+            ->orderBy('id')
+            ->paginate(50);
+
+        return response()->json($instructores);
+    }
+
+    public function instructoresAll()
+    {
+        $instructores = [];
+
+        Instructor::select('id', 'nombre')
+            ->orderBy('id')
+            ->chunk(1000, function ($chunk) use (&$instructores) {
+                foreach ($chunk as $instructor) {
+                    $instructores[] = [
+                        'id' => $instructor->id,
+                        'nombre' => $instructor->nombre,
+                    ];
+                }
+            });
+
+        return response()->json($instructores);
     }
 }
 

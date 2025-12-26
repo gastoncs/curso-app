@@ -38,4 +38,14 @@ class Curso extends Model
     {
         return $this->morphMany(Comentario::class, 'comentable');
     }
+
+    public function safeDelete(): void
+    {
+        if ($this->instructor->cursos()->count() <= 1) {
+            throw new \Exception('El instructor debe de tener al menos un curso registrado');
+        }
+
+        $this->delete();
+    }
+
 }
