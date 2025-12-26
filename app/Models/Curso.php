@@ -47,5 +47,4 @@ class Curso extends Model
 
         $this->delete();
     }
-
 }

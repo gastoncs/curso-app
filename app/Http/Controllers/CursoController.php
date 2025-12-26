@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
+use App\Services\CursoRatingService;
 use App\Models\Curso;
 use App\Models\Instructor;
 use Illuminate\Http\Request;
@@ -69,20 +69,39 @@ class CursoController extends Controller
 
     public function instructoresAll()
     {
-        $instructores = [];
+        return response()->stream(function () {
+            echo '[';
 
-        Instructor::select('id', 'nombre')
-            ->orderBy('id')
-            ->chunk(1000, function ($chunk) use (&$instructores) {
-                foreach ($chunk as $instructor) {
-                    $instructores[] = [
-                        'id' => $instructor->id,
-                        'nombre' => $instructor->nombre,
-                    ];
-                }
-            });
+            $isFirst = true;
+            Instructor::select('id', 'nombre')
+                ->orderBy('id')
+                ->chunk(1000, function ($chunk) use (&$isFirst) {
+                    foreach ($chunk as $instructor) {
+                        if (!$isFirst) {
+                            echo ',';
+                        }
+                        $isFirst = false;
 
-        return response()->json($instructores);
+                        echo json_encode([
+                            'id' => $instructor->id,
+                            'nombre' => $instructor->nombre,
+                        ]);
+                    }
+                });
+
+            echo ']';
+        }, 200, [
+            'Content-Type' => 'application/json',
+            'Cache-Control' => 'no-cache',
+        ]);
+    }
+
+    public function averageRating(Curso $curso, CursoRatingService $ratingService)
+    {
+        return response()->json([
+            'curso' => $curso,
+            'rating_promedio' => $ratingService->averageForCurso($curso),
+        ]);
     }
 }
 
