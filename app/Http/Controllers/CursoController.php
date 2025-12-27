@@ -153,10 +153,8 @@ class CursoController extends Controller
      */
     public function averageRating(CursoRatingService $ratingService): JsonResponse
     {
-        $cursos = $ratingService->allWithAverage();
-
         return response()->json([
-            'cursos' => $cursos
+            'cursos' => $ratingService->getCursosWithRating()
         ]);
     }
 }
