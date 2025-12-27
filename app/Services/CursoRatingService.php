@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 class CursoRatingService
 {
     /**
-     * Extrae todos los cursos con su calificación promedio.
+     * Obtiene todos los cursos con su calificación promedio.
      *
      * @return Collection
      */

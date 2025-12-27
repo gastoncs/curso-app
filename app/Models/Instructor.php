@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Instructor extends Model
 {
@@ -11,12 +13,22 @@ class Instructor extends Model
 
     protected $table = 'instructores';
 
-    public function cursos()
+    /**
+     * Obtiene los cursos que tiene el instructor.
+     *
+     * @return HasMany
+     */
+    public function cursos(): HasMany
     {
         return $this->hasMany(Curso::class);
     }
 
-    public function comentarios()
+    /**
+     * Obtiene los comentarios de los cursos.
+     *
+     * @return MorphMany
+     */
+    public function comentarios(): MorphMany
     {
         return $this->morphMany(Comentario::class, 'comentable');
     }

@@ -10,7 +10,7 @@ Route::prefix('v1')->group(function () {
         return $request->user();
     })->middleware('auth:sanctum');
 
-    Route::get('cursos/average-rating', [CursoController::class, 'averageRating']);
+    Route::get('cursos/ratings', [CursoController::class, 'averageRating']);
     Route::get('cursos/instructores', [CursoController::class, 'instructores']);
     Route::get('cursos/instructores/all', [CursoController::class, 'instructoresAll']);
 

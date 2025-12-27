@@ -5,16 +5,32 @@ namespace App\Http\Controllers;
 use App\Services\CursoRatingService;
 use App\Models\Curso;
 use App\Models\Instructor;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CursoController extends Controller
 {
-    public function index()
+    /**
+     * Obtiene una lista paginada de cursos, incluyendo los datos del instructor asociado.
+     *
+     * @return LengthAwarePaginator
+     */
+    public function index(): LengthAwarePaginator
     {
         return Curso::with('instructor')->paginate(10);
     }
 
-    public function store(Request $request)
+    /**
+     * Registra un nuevo curso.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function store(Request $request): JsonResponse
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
@@ -26,7 +42,14 @@ class CursoController extends Controller
         return response()->json($curso, 201);
     }
 
-    public function show(Curso $curso)
+    /**
+     * Muestra los detalles de un curso específico junto con sus relaciones.
+     *
+     * @param Curso $curso
+     *
+     * @return Model
+     */
+    public function show(Curso $curso): Model
     {
         return $curso->load([
             'instructor',
@@ -36,7 +59,15 @@ class CursoController extends Controller
         ]);
     }
 
-    public function update(Request $request, Curso $curso)
+    /**
+     * Actualiza la información de un curso existente.
+     *
+     * @param Request $request
+     * @param Curso $curso
+     *
+     * @return JsonResponse
+     */
+    public function update(Request $request, Curso $curso): JsonResponse
     {
         $validated = $request->validate([
             'titulo' => 'required|string|max:255',
@@ -48,7 +79,14 @@ class CursoController extends Controller
         return response()->json($curso);
     }
 
-    public function destroy(Curso $curso)
+    /**
+     * Elimina un curso de manera segura.
+     *
+     * @param Curso $curso
+     *
+     * @return JsonResponse
+     */
+    public function destroy(Curso $curso): JsonResponse
     {
         try {
             $curso->safeDelete();
@@ -58,7 +96,12 @@ class CursoController extends Controller
         }
     }
 
-    public function instructores()
+    /**
+     * Obtiene una lista paginada de instructores con sus datos básicos.
+     *
+     * @return JsonResponse
+     */
+    public function instructores(): JsonResponse
     {
         $instructores = Instructor::select('id', 'nombre')
             ->orderBy('id')
@@ -67,7 +110,12 @@ class CursoController extends Controller
         return response()->json($instructores);
     }
 
-    public function instructoresAll()
+    /**
+     * Obtiene una lista de todos los instructores con sus datos básicos.
+     *
+     * @return StreamedResponse
+     */
+    public function instructoresAll(): StreamedResponse
     {
         return response()->stream(function () {
             echo '[';
@@ -96,7 +144,14 @@ class CursoController extends Controller
         ]);
     }
 
-    public function averageRating(CursoRatingService $ratingService)
+    /**
+     * Obtiene la calificación promedio de los cursos.
+     *
+     * @param CursoRatingService $ratingService
+     *
+     * @return JsonResponse
+     */
+    public function averageRating(CursoRatingService $ratingService): JsonResponse
     {
         $cursos = $ratingService->allWithAverage();
 
