@@ -13,29 +13,19 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
     /**
-     * Get the attributes that should be cast.
+     * Obtiene los atributos que deben ser convertidos.
      *
      * @return array<string, string>
      */
@@ -48,7 +38,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Define a one-to-many relationship with the Favorito model.
+     * Define una relación de uno a muchos con el modelo Favorito.
      *
      * @return HasMany
      */
@@ -58,7 +48,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Define a many-to-many relationship with the Curso model through the Favorito model.
+     * Define una relación de muchos a muchos con el modelo Curso a través del modelo Favorito.
      *
      * @return BelongsToMany
      */
@@ -71,7 +61,7 @@ class User extends Authenticatable
     }
 
     /**
-     * Define a one-to-many relationship with the Comentario model.
+     * Define una relación de uno a muchos con el modelo Comentario.
      *
      * @return HasMany
      */
