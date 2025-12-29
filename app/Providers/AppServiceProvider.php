@@ -3,7 +3,9 @@
 namespace App\Providers;
 
 use App\Repositories\CursoRatingRepository;
+use App\Repositories\DbInstructorRepository;
 use App\Repositories\Eloquent\EloquentCursoRatingRepository;
+use App\Repositories\InstructorRepository;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -19,6 +21,8 @@ class AppServiceProvider extends ServiceProvider
             CursoRatingRepository::class,
             EloquentCursoRatingRepository::class
         );
+
+        $this->app->bind(InstructorRepository::class, DbInstructorRepository::class);
     }
 
     /**

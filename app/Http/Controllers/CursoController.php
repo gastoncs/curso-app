@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\InstructorRepository;
 use App\Services\CursoRatingService;
 use App\Models\Curso;
 use App\Models\Instructor;
@@ -9,10 +10,18 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CursoController extends Controller
 {
+    protected $instructorRepo;
+
+    public function __construct(InstructorRepository $instructorRepo)
+    {
+        $this->instructorRepo = $instructorRepo;
+    }
+
     /**
      * Obtiene una lista paginada de cursos, incluyendo los datos del instructor asociado.
      *
@@ -113,10 +122,13 @@ class CursoController extends Controller
     /**
      * Obtiene una lista de todos los instructores con sus datos básicos.
      *
-     * @return StreamedResponse
+     * @return StreamedResponse ;
      */
     public function instructoresAll(): StreamedResponse
     {
+        return $this->instructorRepo->streamAll();
+
+        /**
         return response()->stream(function () {
             echo '[';
 
@@ -142,6 +154,7 @@ class CursoController extends Controller
             'Content-Type' => 'application/json',
             'Cache-Control' => 'no-cache',
         ]);
+        **/
     }
 
     /**

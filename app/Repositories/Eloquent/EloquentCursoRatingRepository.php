@@ -8,6 +8,15 @@ use App\Models\Curso;
 
 class EloquentCursoRatingRepository implements CursoRatingRepository
 {
+
+    /**
+     * Hubiera puesto un paginador
+     * Dependiendo la cantidad de cursos que tenga la BD,
+     * hubiera usado un paginador para evitar problemas de rendimiento.
+     *
+     * O DB::table('cursos')
+     */
+
     /**
      * Obtener cursos con su calificación promedio
      *
