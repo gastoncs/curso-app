@@ -6,16 +6,16 @@ use App\Repositories\InstructorRepository;
 use App\Services\CursoRatingService;
 use App\Models\Curso;
 use App\Models\Instructor;
+use Exception;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class CursoController extends Controller
 {
-    protected $instructorRepo;
+    protected InstructorRepository $instructorRepo;
 
     public function __construct(InstructorRepository $instructorRepo)
     {
@@ -99,8 +99,8 @@ class CursoController extends Controller
     {
         try {
             $curso->safeDelete();
-            return response()->json(['message' => 'Curso eliminado'], 200);
-        } catch (\Exception $e) {
+            return response()->json(['message' => 'Curso eliminado']);
+        } catch (Exception $e) {
             return response()->json(['message' => $e->getMessage()], 422);
         }
     }
