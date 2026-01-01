@@ -114,7 +114,7 @@ class CursoController extends Controller
     {
         $instructores = Instructor::select('id', 'nombre')
             ->orderBy('id')
-            ->paginate(50);
+            ->cursorPaginate(50);
 
         return response()->json($instructores);
     }
@@ -127,34 +127,6 @@ class CursoController extends Controller
     public function instructoresAll(): StreamedResponse
     {
         return $this->instructorRepo->streamAll();
-
-        /**
-        return response()->stream(function () {
-            echo '[';
-
-            $isFirst = true;
-            Instructor::select('id', 'nombre')
-                ->orderBy('id')
-                ->chunk(1000, function ($chunk) use (&$isFirst) {
-                    foreach ($chunk as $instructor) {
-                        if (!$isFirst) {
-                            echo ',';
-                        }
-                        $isFirst = false;
-
-                        echo json_encode([
-                            'id' => $instructor->id,
-                            'nombre' => $instructor->nombre,
-                        ]);
-                    }
-                });
-
-            echo ']';
-        }, 200, [
-            'Content-Type' => 'application/json',
-            'Cache-Control' => 'no-cache',
-        ]);
-        **/
     }
 
     /**
@@ -166,6 +138,9 @@ class CursoController extends Controller
      */
     public function averageRating(CursoRatingService $ratingService): JsonResponse
     {
+        /**
+         * Lo haría con paginate ó StreamedResponse
+         */
         return response()->json([
             'cursos' => $ratingService->getCursosWithRating()
         ]);
