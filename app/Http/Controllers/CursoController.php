@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\DTOs\CursoRatingDto;
+use App\Http\Resources\CursoRatingResource;
 use App\Repositories\InstructorRepository;
 use App\Services\CursoRatingService;
 use App\Models\Curso;
@@ -11,7 +13,9 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Dedoc\Scramble\Attributes\Response;
 
 class CursoController extends Controller
 {
@@ -133,17 +137,13 @@ class CursoController extends Controller
      * Obtiene la calificación promedio de los cursos.
      *
      * @param CursoRatingService $ratingService
-     *
-     * @return JsonResponse
+     * @return AnonymousResourceCollection
      */
-    public function averageRating(CursoRatingService $ratingService): JsonResponse
+    #[Response(status: 200)]
+    public function averageRating(CursoRatingService $ratingService): AnonymousResourceCollection
     {
-        /**
-         * Lo haría con paginate ó StreamedResponse
-         */
-        return response()->json([
-            'cursos' => $ratingService->getCursosWithRating()
-        ]);
+        $cursos = $ratingService->getCursosWithRating();
+
+        return CursoRatingResource::collection($cursos);
     }
 }
-

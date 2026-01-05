@@ -2,21 +2,13 @@
 
 namespace App\Repositories\Eloquent;
 
+use App\DTOs\CursoRatingDto;
 use App\Repositories\CursoRatingRepository;
 use Illuminate\Support\Collection;
 use App\Models\Curso;
 
 class EloquentCursoRatingRepository implements CursoRatingRepository
 {
-
-    /**
-     * Hubiera puesto un paginador
-     * Dependiendo la cantidad de cursos que tenga la BD,
-     * hubiera usado un paginador para evitar problemas de rendimiento.
-     *
-     * O DB::table('cursos')
-     */
-
     /**
      * Obtener cursos con su calificación promedio
      *
@@ -32,7 +24,12 @@ class EloquentCursoRatingRepository implements CursoRatingRepository
                     ->whereNotNull('calificacion')
                     ->selectRaw('ROUND(AVG(calificacion), 2)');
             }, 'rating_promedio')
-            ->get();
+            ->get()
+            ->map(fn ($row) => new CursoRatingDto(
+                id: (int) $row->id,
+                titulo: (string) $row->titulo,
+                rating: $row->rating_promedio !== null ? (float) $row->rating_promedio : null
+            ));
     }
 }
 
