@@ -3,7 +3,7 @@
 namespace App\Providers;
 
 use App\Repositories\CursoRatingRepository;
-use App\Repositories\DbInstructorRepository;
+use App\Repositories\Database\DbInstructorRepository;
 use App\Repositories\Eloquent\EloquentCursoRatingRepository;
 use App\Repositories\InstructorRepository;
 use Illuminate\Support\ServiceProvider;

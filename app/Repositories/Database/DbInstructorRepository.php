@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Repositories;
+namespace App\Repositories\Database;
 
+use App\Repositories\InstructorRepository;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
